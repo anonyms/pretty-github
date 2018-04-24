@@ -4,12 +4,13 @@ from datetime import datetime, timedelta
 
 # Define the pattern for a smiley face
 pattern = [
-    "  121  ",
-    " 1   1 ",
-    "1  2  1",
-    "1     1",
-    " 1   1 ",
-    "  121  "
+    "   1   ",  # Sunday
+    "  111  ",  # Monday
+    " 1   1 ",  # Tuesday
+    " 1   1 ",  # Wednesday
+    "  111  ",  # Thursday
+    "   1   ",  # Friday
+    "       "   # Saturday
 ]
 
 FILENAME = "contributions.txt"
@@ -33,17 +34,23 @@ def create_commit(date, count):
         # Commit the file
         subprocess.run(["git", "commit", "--date", date.isoformat(), "-m", "Contribution"], check=True)
 
+def transpose_pattern(pattern):
+    """Transpose a 7-row pattern to match GitHub's date structure."""
+    return ["".join(row[i] for row in pattern) for i in range(len(pattern[0]))]
 
 def update_contributions(start_date,github_username, github_url):
     ensure_file_exists()
+    transposed_pattern = transpose_pattern(pattern)
     current_date = start_date
     
-    for row in pattern:
-        for char in row:
+    for col in transposed_pattern:  # Each column is a week
+        for day_offset, char in enumerate(col):  # Each row is a day in the week
             if char.isdigit():  # Check if it's a number
                 commit_count = int(char)
-                create_commit(current_date, commit_count)
-            current_date += timedelta(days=1)
+                commit_date = current_date + timedelta(days=day_offset)
+                create_commit(commit_date, commit_count)
+
+        current_date += timedelta(weeks=1)  # Move to the next week
 
     # Push the commits to the repository
     # Create the URL with the token embedded

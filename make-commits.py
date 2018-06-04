@@ -1,6 +1,7 @@
 import os
 import subprocess
 from datetime import datetime, timedelta
+import patterns
 
 # Define the pattern for a smiley face
 pattern = [
@@ -40,6 +41,14 @@ def transpose_pattern(pattern):
 
 def update_contributions(start_date,github_username, github_url):
     ensure_file_exists()
+    
+    pattern_name = input("Enter the pattern name (smiley, heart, rocket, lol_face): ").strip().lower()
+    pattern = patterns.get_pattern(pattern_name)
+
+    if not pattern:
+        print(f"Pattern '{pattern_name}' not found!")
+        return
+
     transposed_pattern = transpose_pattern(pattern)
     current_date = start_date
     

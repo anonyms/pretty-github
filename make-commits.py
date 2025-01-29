@@ -29,6 +29,7 @@ def create_commit(date):
 
 def update_contributions(start_date,github_username, github_url):
     current_date = start_date
+    
     for row in pattern:
         for char in row:
             if char == '0':

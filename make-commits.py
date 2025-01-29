@@ -47,9 +47,12 @@ if __name__ == "__main__":
     start_date_str = input("Enter the start date (YYYY-MM-DD): ")
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
 
+    github_username = input("GitHub User Name")
+    github_repo = input("Enter GitHub Repo for this user name ")
+
     # Initialize the git repository if it doesn't exist
     if not os.path.exists(".git"):
         subprocess.run(["git", "init"], check=True)
-        subprocess.run(["git", "remote", "add", "origin", "https://github.com/anonyms/pretty-github.git"], check=True)
+        subprocess.run(["git", "remote", "add", "origin", "https://github.com/"+github_username+"/"+github_repo+".git"], check=True)
 
     update_contributions(start_date)

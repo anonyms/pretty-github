@@ -4,15 +4,12 @@ from datetime import datetime, timedelta
 
 # Define the pattern for a smiley face
 pattern = [
-    "     000      ",
-    "   0     0    ",
-    " 0         0  ",
-    "0           0 ",
-    "0  0000000  0 ",
-    "0  0     0  0 ",
-    " 0         0  ",
-    "   0     0    ",
-    "     000      "
+    "  000  ",
+    " 0   0 ",
+    "0     0",
+    "0     0",
+    " 0   0 ",
+    "  000  "
 ]
 
 def create_commit(date):

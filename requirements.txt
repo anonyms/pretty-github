@@ -1,0 +1,4 @@
+# Add your dependencies below
+requests
+pandas
+numpy

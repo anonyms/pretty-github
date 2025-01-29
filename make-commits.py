@@ -34,7 +34,6 @@ def update_contributions(start_date,github_username, github_url):
             if char == '0':
                 create_commit(current_date)
             current_date += timedelta(days=1)
-        current_date += timedelta(days=1)  # Move to the next row
 
     # Push the commits to the repository
     # Create the URL with the token embedded

@@ -31,7 +31,7 @@ def transpose_pattern(pattern):
 def update_contributions(start_date,github_username, github_url):
     ensure_file_exists()
     
-    pattern_name = input("Enter the pattern name (smiley, heart, rocket, lol_face): ").strip().lower()
+    pattern_name = input("Enter the pattern name (smiley, heart, rocket, lol_face, mushroom, batman): ").strip().lower()
     pattern = patterns.get_pattern(pattern_name)
 
     if not pattern:

@@ -3,17 +3,6 @@ import subprocess
 from datetime import datetime, timedelta
 import patterns
 
-# Define the pattern for a smiley face
-pattern = [
-    "   1   ",  # Sunday
-    "  111  ",  # Monday
-    " 1   1 ",  # Tuesday
-    " 1   1 ",  # Wednesday
-    "  111  ",  # Thursday
-    "   1   ",  # Friday
-    "       "   # Saturday
-]
-
 FILENAME = "contributions.txt"
 
 def ensure_file_exists():

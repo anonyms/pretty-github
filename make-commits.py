@@ -4,12 +4,12 @@ from datetime import datetime, timedelta
 
 # Define the pattern for a smiley face
 pattern = [
-    "  000  ",
-    " 0   0 ",
-    "0     0",
-    "0     0",
-    " 0   0 ",
-    "  000  "
+    "  121  ",
+    " 1   1 ",
+    "1  2  1",
+    "1     1",
+    " 1   1 ",
+    "  121  "
 ]
 
 FILENAME = "contributions.txt"
@@ -20,17 +20,18 @@ def ensure_file_exists():
         with open(FILENAME, 'w') as f:
             f.write("GitHub Contribution Log\n")
 
-def create_commit(date):
-    """Modify the single file and commit the change."""
-    # Append a new entry to the file
-    with open(FILENAME, 'a') as f:
-        f.write(f"Commit on {date.strftime('%Y-%m-%d %H:%M:%S')}\n")
+def create_commit(date, count):
+    """Modify the file and commit the change multiple times."""
+    for _ in range(count):  # Repeat based on commit count
+        # Append a new entry to the file
+        with open(FILENAME, 'a') as f:
+            f.write(f"Commit on {date.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
-    # Stage the file
-    subprocess.run(["git", "add", FILENAME], check=True)
+        # Stage the file
+        subprocess.run(["git", "add", FILENAME], check=True)
 
-    # Commit the file
-    subprocess.run(["git", "commit", "--date", date.isoformat(), "-m", "Contribution"], check=True)
+        # Commit the file
+        subprocess.run(["git", "commit", "--date", date.isoformat(), "-m", "Contribution"], check=True)
 
 
 def update_contributions(start_date,github_username, github_url):
@@ -39,8 +40,9 @@ def update_contributions(start_date,github_username, github_url):
     
     for row in pattern:
         for char in row:
-            if char == '0':
-                create_commit(current_date)
+            if char.isdigit():  # Check if it's a number
+                commit_count = int(char)
+                create_commit(current_date, commit_count)
             current_date += timedelta(days=1)
 
     # Push the commits to the repository

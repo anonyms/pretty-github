@@ -4,6 +4,13 @@ Making my GitHub contributions view pretty
 
 Pretty pointless stuff really, just wanted to try doing it through Genai Chat bots, all code written through them, with some very minor tweaks I just did without going through them.
 
+### Usage
+
+1. Copy this repo
+2. Establish the right GitHub token, prefrably with limited premissions, and only for the new repo
+3. Build and launch with docker (see below)
+4. Add more patterns if you want - I recommend pasting the code into an AI chatbot, and asking it for more patterns
+
 
 Remember to docker build with arguments
 
@@ -11,8 +18,12 @@ Remember to docker build with arguments
 docker build --build-arg GIT_USER="username" --build-arg GIT_EMAIL="email" -t make-commits .  
 ```
 
+### Watch out
+I get it - the way the tokens are passed is not pretty. 
 
-#### Honorable mentions
+But I did not want it saved anywhere, so passing like this seemed like the best option.
+
+### Honorable mentions
 
 - [gitfiti](https://github.com/gelstudios/gitfiti) main source of inspiration - notably for this list :)
 - [PixelHub](https://github.com/behind24proxies/PixelHub), where you can draw what you want, download a file, and then reproduce it in commit

@@ -27,13 +27,11 @@ def create_commit(date):
         f.write(f"Commit on {date.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
     # Stage the file
-    subprocess.run(["git", "add", filename], check=True)
+    subprocess.run(["git", "add", FILENAME], check=True)
 
     # Commit the file
     subprocess.run(["git", "commit", "--date", date.isoformat(), "-m", "Contribution"], check=True)
 
-    # Remove the file
-    os.remove(filename)
 
 def update_contributions(start_date,github_username, github_url):
     ensure_file_exists()

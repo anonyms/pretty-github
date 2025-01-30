@@ -7,8 +7,8 @@ Pretty pointless stuff really, just wanted to try doing it through Genai Chat bo
 ### Usage
 
 1. Copy this repo
-2. Establish the right GitHub token, prefrably with limited premissions, and only for the new repo
-3. Build and launch with docker (see below)
+2. Establish and copy the right GitHub token, prefrably with limited premissions, and only for the new repo
+3. Build and launch with docker (see below) - enter the necessary parameters during launch. 
 4. Add more patterns if you want - I recommend pasting the code into an AI chatbot, and asking it for more patterns
 
 

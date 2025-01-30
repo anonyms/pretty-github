@@ -12,11 +12,19 @@ pattern = [
     "  000  "
 ]
 
+FILENAME = "contributions.txt"
+
+def ensure_file_exists():
+    """Create the file if it doesn't exist."""
+    if not os.path.exists(FILENAME):
+        with open(FILENAME, 'w') as f:
+            f.write("GitHub Contribution Log\n")
+
 def create_commit(date):
-    # Create a new file with a random name
-    filename = f"file_{date.strftime('%Y%m%d%H%M%S')}.txt"
-    with open(filename, 'w') as f:
-        f.write(f"This is a file created on {date}")
+    """Modify the single file and commit the change."""
+    # Append a new entry to the file
+    with open(FILENAME, 'a') as f:
+        f.write(f"Commit on {date.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
     # Stage the file
     subprocess.run(["git", "add", filename], check=True)
@@ -28,6 +36,7 @@ def create_commit(date):
     os.remove(filename)
 
 def update_contributions(start_date,github_username, github_url):
+    ensure_file_exists()
     current_date = start_date
     
     for row in pattern:

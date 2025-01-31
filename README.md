@@ -4,6 +4,14 @@ Making my GitHub contributions view pretty
 
 Pretty pointless stuff really, just wanted to try doing it through Genai Chat bots, all code written through them, with some very minor tweaks I just did without going through them.
 
+### Learnings - coding with GenAi
+I whish I had taken more notes building this, but overall
+- Impressive interacting with the Gen AIs to beging with, but it definetly helped that I knew some coding, and could give some indications as to what I wanted.
+- I did ask it for alternatives, and it had good proposals. It did however later on mix solution alternatives, even though I stated I had picked on of the alternatives. Example: Docker file, or docker-compose. I chose going for one docker file, but later one it gave ideas around an .env file and docker-compose.
+- There were moments were it just was not able to quite adapt, and where I did a fix myself, seeing what direction the fix had to be inn, or did a quick internet search.
+- The true struggle was with patterns. There was a lot of back and forth, and heavily guided prompts, in order to create a good solution. I also had to manually go in and create most of the paterns. What impressed me was when I asked for the patterns to be transposed, this was resolved on the spot.
+
+
 ### Usage
 
 1. Copy this repo

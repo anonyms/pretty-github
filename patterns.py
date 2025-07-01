@@ -46,7 +46,7 @@ patterns = {
         "      444      ",
         "       4       "
     ],
-    "beer" : [
+    "beer": [
         "      ",
         "  1111",
         " 22222",
@@ -69,4 +69,4 @@ patterns = {
 }
 
 def get_pattern(name):
-    return patterns.get(nameNone)
+    return patterns.get(name)

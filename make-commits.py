@@ -64,7 +64,16 @@ if __name__ == "__main__":
     start_date_str = input("Enter the start date (YYYY-MM-DD): ")
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
 
-    github_username = input("GitHub User Name: ")
+    ##github_username = input("GitHub User Name: ")
+    # Get the GIT_USER environment variable
+    github_username = os.environ.get('GIT_USER')
+
+    if github_username:
+        print(f"The Git user passed from Docker is: {github_username}")
+        # You can now use the 'git_user' variable in your script's logic
+    else:
+        print("GIT_USER environment variable not set.")
+
     github_repo = input("Enter GitHub Repo for this user name: ")
     github_url = "https://github.com/"+github_username+"/"+github_repo+".git"
 

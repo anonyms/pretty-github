@@ -25,6 +25,9 @@ Remember to docker build with arguments
 ```console
 docker build --build-arg GIT_USER="username" --build-arg GIT_EMAIL="email" -t make-commits .  
 ```
+```console
+docker run -it make-commits 
+```
 
 ### Watch out
 I get it - the way the tokens are passed is not pretty. 

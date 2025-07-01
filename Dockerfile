@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 # Set Git user details using environment variables
 ARG GIT_USER
 ARG GIT_EMAIL
+ENV GIT_USER=${GIT_USER}
+ENV GIT_EMAIL=${GIT_EMAIL}
 RUN echo "Git User: $GIT_USER" && echo "Git Email: $GIT_EMAIL"  # Print the variables
 RUN git config --global user.name "$GIT_USER" \
     && git config --global user.email "$GIT_EMAIL"

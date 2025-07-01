@@ -1,5 +1,5 @@
 # pretty-github
-Making my GitHub contributions view pretty
+Making my GitHub contributions view pretty, ie adding icons and such.
 
 
 Pretty pointless stuff really, just wanted to try doing it through Genai Chat bots, all code written through them, with some very minor tweaks I just did without going through them.
@@ -15,7 +15,8 @@ I whish I had taken more notes building this, but overall
 ### Usage
 
 1. Copy this repo
-2. Establish and copy the right GitHub token, prefrably with limited premissions, and only for the new repo
+2. Establish and copy the right GitHub token, prefrably with limited premissions, and only for the new repo. 
+(GitHub Settings -> Developer setting (bottom of the page) -> Personal access tokens -> Fine grained tokens (Not a 100% sure how to tune, I allowed for everythin))
 3. Build and launch with docker (see below) - enter the necessary parameters during launch. 
 4. Add more patterns if you want - I recommend pasting the code into an AI chatbot, and asking it for more patterns
 

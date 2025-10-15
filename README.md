@@ -16,7 +16,7 @@ I whish I had taken more notes building this, but overall
 
 1. Copy this repo
 2. Establish and copy the right GitHub token, prefrably with limited premissions, and only for the new repo. 
-(GitHub Settings -> Developer setting (bottom of the page) -> Personal access tokens -> Fine grained tokens (Not a 100% sure how to tune, I allowed for everythin))
+(GitHub Settings -> Developer setting (bottom of the page) -> Personal access tokens -> Fine grained tokens (Not a 100% sure how to tune, I allowed for everything))
 3. Build and launch with docker (see below) - enter the necessary parameters during launch. 
 4. Add more patterns if you want - I recommend pasting the code into an AI chatbot, and asking it for more patterns
 

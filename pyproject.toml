@@ -1,0 +1,29 @@
+[project]
+name = "pretty-github"
+version = "0.1.0"
+description = "Draw patterns on the GitHub contribution graph with backdated commits."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.8",
+]
+
+# Scripts only for now, nothing to build or install
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Lets tests import patterns.py from the repo root
+pythonpath = ["."]

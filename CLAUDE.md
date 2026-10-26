@@ -50,17 +50,24 @@ What the preview and the commit generator need to get right:
 
 ## Commands
 
-Moving from Docker to a `Makefile` that wraps `uv run` (see `TODO.md`). Until then, Docker as
-in `README.md`:
+Everything runs locally via make and uv. Run `make` to list the targets.
 
-```powershell
-docker build --build-arg GIT_USER="username" --build-arg GIT_EMAIL="email" -t make-commits .
-docker run -it make-commits
-```
+| Command | Purpose |
+|---|---|
+| `make test` | pytest |
+| `make lint` / `make format` | ruff check / format and auto-fix |
+| `make lock` / `make sync` | update `uv.lock` / create the local `.venv` |
+| `make clean` | remove tool caches |
 
-For local Python use `uv run python ...`: `python` in Git Bash is the Microsoft Store alias.
-Makefile recipes run under cmd.exe: plain commands only, no pipes, redirects, `rm -rf` or `&&`
-chains; use `$(info)` for printed text.
+Making the commits still runs through Docker as in `README.md`, until the commit step is
+reworked and Docker removed (see `TODO.md`).
+
+- Dependencies: `uv add <pkg>` (or `uv add --group dev <pkg>`); commit `uv.lock` together with
+  `pyproject.toml`, never edit it by hand.
+- For Python use `uv run python ...`: `python` in Git Bash is the Microsoft Store alias.
+- Makefile recipes run under cmd.exe: plain commands only, no pipes, redirects, `rm -rf` or
+  `&&` chains; use `$(info)` for printed text.
+- Run `make lint` and `make test` before pushing.
 
 ## Rules for Claude
 
@@ -72,7 +79,7 @@ chains; use `$(info)` for printed text.
 
 ## Conventions
 
-- Python, managed with uv once `pyproject.toml` exists. Keep logic (pattern → dates and counts,
+- Python 3.13, ruff (line length 100). Keep logic (pattern → dates and counts,
   preview rendering) in plain functions that can be tested without git or the network.
 - Comments are for the maintainer, who knows some Python: explain the why and non-obvious
   constructs briefly, don't repeat the code.

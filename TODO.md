@@ -6,10 +6,10 @@ Open work and ideas. Tick items off (or remove them) in the PR that finishes the
 
 The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
-- [ ] **Project setup**: `pyproject.toml` with uv, ruff and pytest; drop the unused
+- [x] **Project setup**: `pyproject.toml` with uv, ruff and pytest; drop the unused
       `requests`, `pandas` and `numpy`; `.gitattributes` for LF. A `Makefile` wrapping
-      `uv run` (`make test`, `make lint`, `make format`, later `make preview` and
-      `make commits`), with `make` alone listing the targets. No behaviour change.
+      `uv run` (`make test`, `make lint`, `make format`; `make preview` and `make commits`
+      come with their PRs), with `make` alone listing the targets. No behaviour change.
 - [ ] **Fix the patterns and make them testable**: add the missing commas (smiley, heart,
       rocket, mushroom), remove `lol_face` from the prompt (it does not exist), and a test that
       every pattern has 7 rows of equal width and only digits or spaces.

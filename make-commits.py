@@ -1,37 +1,51 @@
 import os
 import subprocess
 from datetime import datetime, timedelta
+
 import patterns
 
 FILENAME = "contributions.txt"
 
+
 def ensure_file_exists():
     """Create the file if it doesn't exist."""
     if not os.path.exists(FILENAME):
-        with open(FILENAME, 'w') as f:
+        with open(FILENAME, "w") as f:
             f.write("GitHub Contribution Log\n")
+
 
 def create_commit(date, count):
     """Modify the file and commit the change multiple times."""
     for _ in range(count):  # Repeat based on commit count
         # Append a new entry to the file
-        with open(FILENAME, 'a') as f:
+        with open(FILENAME, "a") as f:
             f.write(f"Commit on {date.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
         # Stage the file
         subprocess.run(["git", "add", FILENAME], check=True)
 
         # Commit the file
-        subprocess.run(["git", "commit", "--date", date.isoformat(), "-m", "Contribution"], check=True)
+        subprocess.run(
+            ["git", "commit", "--date", date.isoformat(), "-m", "Contribution"], check=True
+        )
+
 
 def transpose_pattern(pattern):
     """Transpose a 7-row pattern to match GitHub's date structure."""
     return ["".join(row[i] for row in pattern) for i in range(len(pattern[0]))]
 
-def update_contributions(start_date,github_username, github_url):
+
+def update_contributions(start_date, github_username, github_url):
     ensure_file_exists()
-    
-    pattern_name = input("Enter the pattern name (smiley, heart, rocket, lol_face, mushroom, batman, beer, baby-yoda): ").strip().lower()
+
+    pattern_name = (
+        input(
+            "Enter the pattern name "
+            "(smiley, heart, rocket, lol_face, mushroom, batman, beer, baby-yoda): "
+        )
+        .strip()
+        .lower()
+    )
     pattern = patterns.get_pattern(pattern_name)
 
     if not pattern:
@@ -40,7 +54,7 @@ def update_contributions(start_date,github_username, github_url):
 
     transposed_pattern = transpose_pattern(pattern)
     current_date = start_date
-    
+
     for col in transposed_pattern:  # Each column is a week
         for day_offset, char in enumerate(col):  # Each row is a day in the week
             if char.isdigit():  # Check if it's a number
@@ -54,10 +68,13 @@ def update_contributions(start_date,github_username, github_url):
     # Create the URL with the token embedded
 
     token = input("Enter GitHub Token: ")
-    repo_with_token_url = f"https://{github_username}:{token}@{github_url[8:]}"  # Removes "https://"
+    repo_with_token_url = (
+        f"https://{github_username}:{token}@{github_url[8:]}"  # Removes "https://"
+    )
 
     # Run the git push command with the updated URL
     subprocess.run(["git", "push", repo_with_token_url], check=True)
+
 
 if __name__ == "__main__":
     # Get start date from the user
@@ -66,7 +83,7 @@ if __name__ == "__main__":
 
     ##github_username = input("GitHub User Name: ")
     # Get the GIT_USER environment variable
-    github_username = os.environ.get('GIT_USER')
+    github_username = os.environ.get("GIT_USER")
 
     if github_username:
         print(f"The Git user passed from Docker is: {github_username}")
@@ -75,11 +92,20 @@ if __name__ == "__main__":
         print("GIT_USER environment variable not set.")
 
     github_repo = input("Enter GitHub Repo for this user name: ")
-    github_url = "https://github.com/"+github_username+"/"+github_repo+".git"
+    github_url = "https://github.com/" + github_username + "/" + github_repo + ".git"
 
     # Initialize the git repository if it doesn't exist
     if not os.path.exists(".git"):
         subprocess.run(["git", "init"], check=True)
-        subprocess.run(["git", "remote", "add", "origin", "https://github.com/"+github_username+"/"+github_repo+".git"], check=True)
+        subprocess.run(
+            [
+                "git",
+                "remote",
+                "add",
+                "origin",
+                "https://github.com/" + github_username + "/" + github_repo + ".git",
+            ],
+            check=True,
+        )
 
     update_contributions(start_date, github_username, github_url)

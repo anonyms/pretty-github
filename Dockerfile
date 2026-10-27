@@ -19,8 +19,5 @@ RUN git config --global user.name "$GIT_USER" \
 # Copy the current directory contents into the container
 COPY . /app
 
-# Install dependencies (if any)
-RUN pip install --no-cache-dir -r requirements.txt || true
-
 # Command to run the script (replace script.py with your actual file)
 CMD ["python", "make-commits.py"]

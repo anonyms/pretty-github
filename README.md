@@ -30,6 +30,11 @@ docker build --build-arg GIT_USER="username" --build-arg GIT_EMAIL="email" -t ma
 docker run -it make-commits 
 ```
 
+### Development
+
+Needs [uv](https://docs.astral.sh/uv/) and make (on Windows: `winget install ezwinports.make`).
+Run `make` to list the targets, e.g. `make test` and `make lint`.
+
 ### Watch out
 I get it - the way the tokens are passed is not pretty. 
 

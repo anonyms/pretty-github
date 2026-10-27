@@ -1,5 +1,7 @@
 # patterns.py
 
+# Each pattern is drawn row by row, so keep ruff from reflowing it.
+# fmt: off
 patterns = {
     "smiley": [
         "          " 
@@ -67,6 +69,8 @@ patterns = {
 
     ]
 }
+# fmt: on
+
 
 def get_pattern(name):
     return patterns.get(name)

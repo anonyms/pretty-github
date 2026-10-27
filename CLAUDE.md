@@ -8,8 +8,8 @@ Draw pictures (patterns, later text) on a GitHub contribution graph by creating 
 commits. The goal of the current iteration:
 
 1. **Preview** what the graph will look like before anything is committed or pushed.
-2. **A better flow**: pick a pattern and position, preview, then create the commits in a
-   separate target repo and push, with as little manual input as possible.
+2. **A better flow**: pick a pattern and position, preview, then create the commits in this
+   repo and push, with as little manual input as possible.
 
 ## Where things stand
 

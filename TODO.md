@@ -53,6 +53,5 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 - **The fake commits stay in this repo**, on `main`: that is the point of the project. Never
   rewrite or squash them (2026-10-26).
-- **uv + Makefile instead of Docker**, like streamlit-game-picker and newsletter-ai
-  (2026-10-26).
+- **uv + Makefile instead of Docker**, like the maintainer's other repos (2026-10-26).
 - **Preview starts in the terminal**; HTML/SVG later (2026-10-26).

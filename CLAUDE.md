@@ -27,11 +27,11 @@ The fake commits go into **this repo** on purpose: that is how they reach the gr
 "Contribution" commits from 2018–2024 in `main` are earlier drawings, not clutter. They must
 stay on `main` (the default branch) to count, so never squash or rewrite them.
 
-Known problems are listed in `TODO.md`. The most important ones:
+Known problems are listed in `TODO.md`. The most important one: there is no preview and no
+dry run, so the only way to see the result is to push.
 
-- Four patterns (smiley, heart, rocket, mushroom) are missing commas between rows, so Python
-  joins them into one long string and they draw as a single line.
-- There is no preview and no dry run: the only way to see the result is to push.
+`tests/test_patterns.py` checks every pattern is 7 rows of equal width. `patterns.py` is
+wrapped in `# fmt: off` so ruff keeps each pattern one row per line.
 
 ## How the contribution graph works
 

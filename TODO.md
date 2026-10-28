@@ -10,7 +10,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
       `requests`, `pandas` and `numpy`; `.gitattributes` for LF. A `Makefile` wrapping
       `uv run` (`make test`, `make lint`, `make format`; `make preview` and `make commits`
       come with their PRs), with `make` alone listing the targets. No behaviour change.
-- [ ] **Fix the patterns and make them testable**: add the missing commas (smiley, heart,
+- [x] **Fix the patterns and make them testable**: add the missing commas (smiley, heart,
       rocket, mushroom), remove `lol_face` from the prompt (it does not exist), and a test that
       every pattern has 7 rows of equal width and only digits or spaces.
 - [ ] **Pattern → plan, as a pure function**: given a pattern and a start Sunday, return the list
@@ -31,7 +31,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 ## Bugs in version 1
 
-- [ ] Four patterns draw as one line (missing commas, see Next up).
+- [x] Four patterns draw as one line (missing commas, see Next up).
 - [ ] The token is typed with `input()` (shown on screen) and put in the push URL.
 - [ ] No check that the start date is a Sunday, so patterns come out shifted or cut.
 - [ ] `GIT_USER` unset crashes later with a `TypeError` instead of a clear message.

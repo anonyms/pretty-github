@@ -16,12 +16,13 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - [x] **Pattern → plan, as a pure function**: given a pattern and a start Sunday, return the list
       of (date, commit count). Reject a start date that is not a Sunday. Tests. Both the
       preview and the commit step use this, so they can never disagree.
-- [ ] **Preview v1, in the terminal**: print the year grid with coloured squares (ANSI), with
+- [x] **Preview v1, in the terminal**: print the year grid with coloured squares (ANSI), with
       the pattern placed on it, before asking anything else. Pattern alone, no real data yet.
-- [ ] **Preview v2, with real contributions**: fetch the user's calendar for the year (GitHub
+- [x] **Preview v2, with real contributions**: fetch the user's calendar for the year (GitHub
       GraphQL `contributionsCollection`, via `gh api graphql`) and show "now" and "after" side
       by side, with colours bucketed over the combined data. Matters here because earlier
       drawings (2023, 2024) are already on the graph and a new one may overlap them.
+      Done as two grids above each other (side by side is too wide), plus an overlap count.
 - [ ] **Rework the commit step** (`make commits`): reads the same plan as the preview, shows
       it and asks for confirmation; dry run by default. Commit with
       `GIT_AUTHOR_DATE`/`GIT_COMMITTER_DATE` (maybe `git fast-import` for speed), push with
@@ -44,7 +45,14 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - **Text**: render short text with a 5×7 pixel font.
 - **Patterns as files** (`patterns/*.txt`) instead of a Python dict, so adding one needs no code.
 - **Intensity by level, not count**: write patterns as levels 1–4 and work out the commit
-  counts from the user's real data so the colours come out as drawn.
+  counts from the user's real data so the colours come out as drawn. Matters in a busy year:
+  in 2026 anything up to 5 commits is the faintest shade, so a pattern of 1s barely shows.
+  Needs the cap below.
+- **Better "after" shades**: work out the cap (busiest day without outliers) from GitHub's
+  real levels for the year, instead of assuming the busiest day. Measured 2026-10-28, cap
+  that fits each year: 2018 → 2 (busiest 3), 2019 → 1 (busiest 4, one day), 2023 → 4,
+  2024 → 5, 2025 → 14 (all equal to the busiest day), 2026 → about 20 (busiest 28, two
+  days). 2019 and 2025 both have one top day, but only 2019's is dropped.
 - **HTML/SVG preview** that looks like the real graph, after the terminal one.
 - **Editor**: a small web page or Streamlit app to draw a pattern on the grid with a live
   preview, then export it.

@@ -35,6 +35,12 @@ docker run -it make-commits
 Needs [uv](https://docs.astral.sh/uv/) and make (on Windows: `winget install ezwinports.make`).
 Run `make` to list the targets, e.g. `make test` and `make lint`.
 
+To see a pattern on the graph before committing anything (the start date must be a Sunday):
+
+```console
+make preview PATTERN=heart START=2024-03-03
+```
+
 ### Watch out
 I get it - the way the tokens are passed is not pretty. 
 

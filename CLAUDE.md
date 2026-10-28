@@ -24,14 +24,16 @@ so it was never designed as a whole. It is one script:
 - `plan.py`: `plan_commits(pattern, start)` turns a pattern and a start Sunday into
   `(day, commits)` pairs. The one place that maps patterns onto the graph: the preview and
   the commit step must both use it.
+- `preview.py`: draws the plan as the year's graph in the terminal (`make preview`). Digits
+  instead of colours when the output is not a terminal, which is what the tests check.
 - `Dockerfile`: runs the script; git user and email come in as build args.
 
 The fake commits go into **this repo** on purpose: that is how they reach the graph. The 900+
 "Contribution" commits from 2018–2024 in `main` are earlier drawings, not clutter. They must
 stay on `main` (the default branch) to count, so never squash or rewrite them.
 
-Known problems are listed in `TODO.md`. The most important one: there is no preview and no
-dry run, so the only way to see the result is to push.
+Known problems are listed in `TODO.md`. The most important one: the preview shows the pattern
+alone, without the maintainer's real contributions, so the shades are only a guide.
 
 `tests/test_patterns.py` checks every pattern is 7 rows of equal width. `patterns.py` is
 wrapped in `# fmt: off` so ruff keeps each pattern one row per line.
@@ -57,6 +59,7 @@ Everything runs locally via make and uv. Run `make` to list the targets.
 
 | Command | Purpose |
 |---|---|
+| `make preview PATTERN=heart START=2024-03-03` | show a pattern on the graph; START is a Sunday |
 | `make test` | pytest |
 | `make lint` / `make format` | ruff check / format and auto-fix |
 | `make lock` / `make sync` | update `uv.lock` / create the local `.venv` |

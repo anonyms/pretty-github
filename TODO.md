@@ -16,7 +16,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - [x] **Pattern → plan, as a pure function**: given a pattern and a start Sunday, return the list
       of (date, commit count). Reject a start date that is not a Sunday. Tests. Both the
       preview and the commit step use this, so they can never disagree.
-- [ ] **Preview v1, in the terminal**: print the year grid with coloured squares (ANSI), with
+- [x] **Preview v1, in the terminal**: print the year grid with coloured squares (ANSI), with
       the pattern placed on it, before asking anything else. Pattern alone, no real data yet.
 - [ ] **Preview v2, with real contributions**: fetch the user's calendar for the year (GitHub
       GraphQL `contributionsCollection`, via `gh api graphql`) and show "now" and "after" side

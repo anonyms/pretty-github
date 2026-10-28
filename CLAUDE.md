@@ -21,6 +21,9 @@ so it was never designed as a whole. It is one script:
   pushes with the token embedded in the URL.
 - `patterns.py`: a dict of patterns, 7 strings (one per weekday row), a digit = commits that
   day, space = none.
+- `plan.py`: `plan_commits(pattern, start)` turns a pattern and a start Sunday into
+  `(day, commits)` pairs. The one place that maps patterns onto the graph: the preview and
+  the commit step must both use it.
 - `Dockerfile`: runs the script; git user and email come in as build args.
 
 The fake commits go into **this repo** on purpose: that is how they reach the graph. The 900+

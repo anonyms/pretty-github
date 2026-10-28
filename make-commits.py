@@ -1,8 +1,9 @@
 import os
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime, time
 
 import patterns
+from plan import check_start, plan_commits
 
 FILENAME = "contributions.txt"
 
@@ -30,11 +31,6 @@ def create_commit(date, count):
         )
 
 
-def transpose_pattern(pattern):
-    """Transpose a 7-row pattern to match GitHub's date structure."""
-    return ["".join(row[i] for row in pattern) for i in range(len(pattern[0]))]
-
-
 def update_contributions(start_date, github_username, github_url):
     ensure_file_exists()
 
@@ -47,17 +43,9 @@ def update_contributions(start_date, github_username, github_url):
         print(f"Pattern '{pattern_name}' not found!")
         return
 
-    transposed_pattern = transpose_pattern(pattern)
-    current_date = start_date
-
-    for col in transposed_pattern:  # Each column is a week
-        for day_offset, char in enumerate(col):  # Each row is a day in the week
-            if char.isdigit():  # Check if it's a number
-                commit_count = int(char)
-                commit_date = current_date + timedelta(days=day_offset)
-                create_commit(commit_date, commit_count)
-
-        current_date += timedelta(weeks=1)  # Move to the next week
+    for day, count in plan_commits(pattern, start_date.date()):
+        # Commit at midnight, as version 1 did
+        create_commit(datetime.combine(day, time()), count)
 
     # Push the commits to the repository
     # Create the URL with the token embedded
@@ -75,6 +63,11 @@ if __name__ == "__main__":
     # Get start date from the user
     start_date_str = input("Enter the start date (YYYY-MM-DD): ")
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+    # Stop before asking anything else if the date is not a Sunday
+    try:
+        check_start(start_date.date())
+    except ValueError as error:
+        raise SystemExit(error) from None
 
     ##github_username = input("GitHub User Name: ")
     # Get the GIT_USER environment variable

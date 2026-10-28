@@ -14,11 +14,11 @@ commits. The goal of the current iteration:
 ## Where things stand
 
 Version 1 (January–July 2025) was written by copy-pasting between Gemini, ChatGPT and Mistral,
-so it was never designed as a whole. It is one script:
+so it was never designed as a whole. Version 2 replaces it piece by piece:
 
-- `make-commits.py`: asks for a start date, a pattern name, a repo name and a token (all via
-  `input()`), writes one line to `contributions.txt` per commit, commits it with `--date`, and
-  pushes with the token embedded in the URL.
+- `commits.py` (`make commits`): checks main is clean and level with GitHub, shows the
+  preview, asks before committing and before pushing. Empty commits at 12:00 UTC, pushed with
+  git's stored login. Prints the undo (`git reset --keep <sha>`) before the first commit.
 - `patterns.py`: a dict of patterns, 7 strings (one per weekday row), a digit = commits that
   day, space = none.
 - `plan.py`: `plan_commits(pattern, start)` turns a pattern and a start Sunday into
@@ -30,17 +30,18 @@ so it was never designed as a whole. It is one script:
   terminal, which is what the tests check.
 - `contributions.py`: reads the real graph through `gh api graphql` (read only). Falls back
   to the pattern alone if `gh` is missing or offline.
-- `Dockerfile`: runs the script; git user and email come in as build args.
+- Version 1, until the next PR removes it: `make-commits.py` (asks for a token, appends to
+  `contributions.txt` per commit) and the `Dockerfile` that runs it.
 
 The fake commits go into **this repo** on purpose: that is how they reach the graph. The 900+
 "Contribution" commits from 2018–2024 in `main` are earlier drawings, not clutter. They must
 stay on `main` (the default branch) to count, so never squash or rewrite them.
 
-Known problems are listed in `TODO.md`. The most important one: the commit step does not use
-the preview yet, and still asks for a token.
+Open work is in `TODO.md`.
 
 `tests/test_patterns.py` checks every pattern is 7 rows of equal width. `patterns.py` is
-wrapped in `# fmt: off` so ruff keeps each pattern one row per line.
+wrapped in `# fmt: off` so ruff keeps each pattern one row per line. `tests/test_commits.py`
+makes real commits, but only in throwaway repos under pytest's `tmp_path`.
 
 ## How the contribution graph works
 
@@ -69,13 +70,13 @@ Everything runs locally via make and uv. Run `make` to list the targets.
 | Command | Purpose |
 |---|---|
 | `make preview PATTERN=heart START=2024-03-03` | show a pattern on the graph; START is a Sunday |
+| `make commits PATTERN=heart START=2024-03-03` | the same preview, then commit and push (asks first) |
 | `make test` | pytest |
 | `make lint` / `make format` | ruff check / format and auto-fix |
 | `make lock` / `make sync` | update `uv.lock` / create the local `.venv` |
 | `make clean` | remove tool caches |
 
-Making the commits still runs through Docker as in `README.md`, until the commit step is
-reworked and Docker removed (see `TODO.md`).
+The old Docker way still works until the next PR removes it.
 
 - Dependencies: `uv add <pkg>` (or `uv add --group dev <pkg>`); commit `uv.lock` together with
   `pyproject.toml`, never edit it by hand.
@@ -86,8 +87,10 @@ reworked and Docker removed (see `TODO.md`).
 
 ## Rules for Claude
 
-- **Never create contribution commits or push them.** That step runs on `main` and is the
-  maintainer's; print the command instead. Previews and dry runs are fine.
+- **Never run `make commits`** or otherwise create contribution commits in this repo or push
+  them. That step runs on `main` and is the maintainer's; print the command instead.
+  `make preview`, and end-to-end runs against throwaway clones in the scratchpad (a bare
+  clone standing in for GitHub), are fine.
 - **Never ask for, print or store a GitHub token.** Prefer `gh auth` or the git credential
   helper over tokens in URLs.
 - Never rewrite or squash this repo's history: the old "Contribution" commits are the drawings.

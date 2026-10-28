@@ -24,16 +24,20 @@ so it was never designed as a whole. It is one script:
 - `plan.py`: `plan_commits(pattern, start)` turns a pattern and a start Sunday into
   `(day, commits)` pairs. The one place that maps patterns onto the graph: the preview and
   the commit step must both use it.
-- `preview.py`: draws the plan as the year's graph in the terminal (`make preview`). Digits
-  instead of colours when the output is not a terminal, which is what the tests check.
+- `preview.py`: draws the year's graph in the terminal (`make preview`): now, with GitHub's
+  own shades, and after the planned commits, with estimated shades, plus how many planned
+  days already have contributions. Digits instead of colours when the output is not a
+  terminal, which is what the tests check.
+- `contributions.py`: reads the real graph through `gh api graphql` (read only). Falls back
+  to the pattern alone if `gh` is missing or offline.
 - `Dockerfile`: runs the script; git user and email come in as build args.
 
 The fake commits go into **this repo** on purpose: that is how they reach the graph. The 900+
 "Contribution" commits from 2018–2024 in `main` are earlier drawings, not clutter. They must
 stay on `main` (the default branch) to count, so never squash or rewrite them.
 
-Known problems are listed in `TODO.md`. The most important one: the preview shows the pattern
-alone, without the maintainer's real contributions, so the shades are only a guide.
+Known problems are listed in `TODO.md`. The most important one: the commit step does not use
+the preview yet, and still asks for a token.
 
 `tests/test_patterns.py` checks every pattern is 7 rows of equal width. `patterns.py` is
 wrapped in `# fmt: off` so ruff keeps each pattern one row per line.
@@ -51,7 +55,12 @@ What the preview and the commit generator need to get right:
 - The colours (5 levels) are **relative to the user's own activity**: the same number of
   commits can be a light or a dark square depending on their other contributions. So the
   preview must combine the pattern with the user's real contributions to be accurate.
-  (The exact bucketing is not documented by GitHub; verify against a real graph.)
+- GitHub does not document the shading. Measured 2026-10-28 on the maintainer's graph: shade =
+  `ceil(4 × count / cap)`, where the cap is the busiest day except that some outlier days are
+  left out (2026: busiest 28, cap about 20). When outliers are dropped is not consistent, so
+  the preview's "after" shades are an estimate. The API returns GitHub's real shade per day
+  (`contributionLevel`), so "now" is exact.
+- Reading the graph (`gh api graphql`, `gh api user`) is read only and fine for Claude to run.
 
 ## Commands
 

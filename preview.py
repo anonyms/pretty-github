@@ -1,8 +1,8 @@
 """Shows a plan as the contribution graph in the terminal, before anything is committed.
 
 Run with `make preview PATTERN=heart START=2024-01-07`. Uses plan_commits, so it shows
-exactly the days and counts the commit step would make. Pattern alone for now: the
-maintainer's real contributions are not fetched yet, so the shades are only a guide.
+exactly the days and counts the commit step would make. Shows the real graph now (GitHub's
+own shades) and after the commits (shades estimated: GitHub's rule is not documented).
 """
 
 import math
@@ -11,6 +11,7 @@ import sys
 from datetime import date, datetime, timedelta
 
 import patterns
+from contributions import Day, fetch_calendar
 from plan import plan_commits
 
 # GitHub's dark-theme greens, from level 0 (no commits) to 4 (busiest)
@@ -21,13 +22,17 @@ WEEKDAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""]
 Grid = list[list[int | None]]
 
 
-def year_grid(plan: list[tuple[date, int]], year: int) -> tuple[date, Grid]:
-    """Commits per day for the year, as the graph lays it out, plus the first column's Sunday.
+def year_grid(
+    plan: list[tuple[date, int]], year: int, last_day: date | None = None
+) -> tuple[date, Grid]:
+    """Values per day for the year, as the graph lays it out, plus the first column's Sunday.
 
-    Runs past 31 December if the plan does, so a drawing is never cut off.
+    Runs past 31 December if the plan does, so a drawing is never cut off. Passing last_day
+    fixes the end instead, so the grids of the real graph line up with the pattern's.
     """
     first_day = date(year, 1, 1)
-    last_day = max([date(year, 12, 31)] + [day for day, _ in plan])
+    if last_day is None:
+        last_day = max([date(year, 12, 31)] + [day for day, _ in plan])
     # isoweekday() is 7 for Sunday, so % 7 gives days since the last Sunday
     first_sunday = first_day - timedelta(days=first_day.isoweekday() % 7)
     weeks = (last_day - first_sunday).days // 7 + 1
@@ -40,6 +45,14 @@ def year_grid(plan: list[tuple[date, int]], year: int) -> tuple[date, Grid]:
             if first_day <= day <= last_day:
                 grid[weekday][week] = counts.get(day, 0)
     return first_sunday, grid
+
+
+def combine(plan: list[tuple[date, int]], real: dict[date, Day]) -> list[tuple[date, int]]:
+    """Contributions per day once the plan is committed: the real counts plus the plan."""
+    totals = {day: real_day.count for day, real_day in real.items()}
+    for day, count in plan:
+        totals[day] = totals.get(day, 0) + count
+    return sorted(totals.items())
 
 
 def levels(grid: Grid) -> Grid:
@@ -100,13 +113,36 @@ def main(argv: list[str]) -> None:
     except ValueError as error:
         raise SystemExit(error) from None
 
-    first_sunday, grid = year_grid(plan, start.year)
+    last_day = max(date(start.year, 12, 31), plan[-1][0])
+    try:
+        real = fetch_calendar(range(start.year, last_day.year + 1))
+    except RuntimeError as error:
+        print(f"Could not read your graph from GitHub ({error}); showing the pattern alone.\n")
+        real = None
+
     # Windows may default to cp1252, which has no ■; an empty os.system call switches on
     # colour codes in the old Windows console
     sys.stdout.reconfigure(encoding="utf-8")
     if os.name == "nt":
         os.system("")
-    print(render(first_sunday, levels(grid), colour=sys.stdout.isatty()))
+    colour = sys.stdout.isatty()
+
+    if real is None:
+        first_sunday, grid = year_grid(plan, start.year, last_day)
+        print(render(first_sunday, levels(grid), colour))
+    else:
+        real_levels = [(day, real_day.level) for day, real_day in real.items()]
+        first_sunday, now = year_grid(real_levels, start.year, last_day)
+        _, after = year_grid(combine(plan, real), start.year, last_day)
+        print("Now, with GitHub's own shades")
+        print(render(first_sunday, now, colour))
+        print("\nAfter the commits, shades estimated (GitHub may differ)")
+        print(render(first_sunday, levels(after), colour))
+        busy = [day for day, _ in plan if day in real and real[day].count]
+        if busy:
+            print(f"\nLands on {len(busy)} days that already have contributions, first {busy[0]}")
+        else:
+            print("\nNo overlap with existing contributions")
     total = sum(count for _, count in plan)
     print(f"\n{name}: {total} commits on {len(plan)} days, {plan[0][0]} to {plan[-1][0]}")
 

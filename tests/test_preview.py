@@ -1,8 +1,9 @@
 from datetime import date
 
 import patterns
+from contributions import Day
 from plan import plan_commits
-from preview import levels, month_header, render, year_grid
+from preview import combine, levels, month_header, render, year_grid
 
 
 def test_year_starts_on_the_sunday_before_new_year():
@@ -53,3 +54,20 @@ def test_render_without_colour():
     assert lines[1] == "    1 ."
     assert lines[2] == "Mon . ."
     assert lines[7] == "      4"
+
+
+def test_combine_adds_the_plan_to_the_real_counts():
+    real = {date(2024, 1, 8): Day(2, 2), date(2024, 1, 9): Day(0, 0)}
+    plan = [(date(2024, 1, 8), 1), (date(2024, 1, 10), 3)]
+    assert combine(plan, real) == [
+        (date(2024, 1, 8), 3),
+        (date(2024, 1, 9), 0),
+        (date(2024, 1, 10), 3),
+    ]
+
+
+def test_last_day_fixes_the_end_of_the_grid():
+    # Real data for a whole second year must not widen the grid past the pattern's end
+    real = [(date(2025, 12, 31), 4)]
+    _, grid = year_grid(real, 2024, last_day=date(2024, 12, 31))
+    assert len(grid[0]) == 53

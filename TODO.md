@@ -13,7 +13,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - [x] **Fix the patterns and make them testable**: add the missing commas (smiley, heart,
       rocket, mushroom), remove `lol_face` from the prompt (it does not exist), and a test that
       every pattern has 7 rows of equal width and only digits or spaces.
-- [ ] **Pattern → plan, as a pure function**: given a pattern and a start Sunday, return the list
+- [x] **Pattern → plan, as a pure function**: given a pattern and a start Sunday, return the list
       of (date, commit count). Reject a start date that is not a Sunday. Tests. Both the
       preview and the commit step use this, so they can never disagree.
 - [ ] **Preview v1, in the terminal**: print the year grid with coloured squares (ANSI), with
@@ -33,7 +33,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 - [x] Four patterns draw as one line (missing commas, see Next up).
 - [ ] The token is typed with `input()` (shown on screen) and put in the push URL.
-- [ ] No check that the start date is a Sunday, so patterns come out shifted or cut.
+- [x] No check that the start date is a Sunday, so patterns come out shifted or cut.
 - [ ] `GIT_USER` unset crashes later with a `TypeError` instead of a clear message.
 - [ ] One `git add` + `git commit` subprocess per commit: slow for large patterns.
 

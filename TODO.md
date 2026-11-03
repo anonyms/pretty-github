@@ -33,7 +33,11 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - [x] **Remove Docker and version 1**: `Dockerfile`, `make-commits.py`, `contributions.txt`,
       the Docker part of `README.md` and its "Watch out" about tokens.
 
-The queue is empty: the next PRs come from the ideas below.
+- [x] **More default patterns**: space-invader, pacman, christmas-tree, star, cat, house,
+      skull, creeper (15 in all).
+- [ ] **Patterns from an image**: turn a small picture (PNG) into a pattern by shrinking it to
+      7 rows and mapping darkness to shades 1–4. Needs Pillow. To decide in the plan: where a
+      new pattern is saved (see "Patterns as files" below).
 
 ## Bugs in version 1
 
@@ -52,10 +56,6 @@ The queue is empty: the next PRs come from the ideas below.
   tool work out the start Sunday.
 - **Text**: render short text with a 5×7 pixel font.
 - **Patterns as files** (`patterns/*.txt`) instead of a Python dict, so adding one needs no code.
-- **Intensity by level, not count**: write patterns as levels 1–4 and work out the commit
-  counts from the user's real data so the colours come out as drawn. Matters in a busy year:
-  in 2026 anything up to 5 commits is the faintest shade, so a pattern of 1s barely shows.
-  Needs the cap below.
 - **Better "after" shades**: work out the cap (busiest day without outliers) from GitHub's
   real levels for the year, instead of assuming the busiest day. Measured 2026-10-28, cap
   that fits each year: 2018 → 2 (busiest 3), 2019 → 1 (busiest 4, one day), 2023 → 4,
@@ -71,3 +71,5 @@ The queue is empty: the next PRs come from the ideas below.
   rewrite or squash them (2026-10-26).
 - **uv + Makefile instead of Docker**, like the maintainer's other repos (2026-10-26).
 - **Preview starts in the terminal**; HTML/SVG later (2026-10-26).
+- **No "intensity by level"** (patterns as shades, commit counts worked out from real data):
+  drawings go into quiet years, where the digits already come out as drawn (2026-11-03).

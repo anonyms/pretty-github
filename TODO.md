@@ -35,9 +35,11 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 - [x] **More default patterns**: space-invader, pacman, christmas-tree, star, cat, house,
       skull, creeper (15 in all).
-- [ ] **Patterns from an image**: turn a small picture (PNG) into a pattern by shrinking it to
-      7 rows and mapping darkness to shades 1–4. Needs Pillow. To decide in the plan: where a
-      new pattern is saved (see "Patterns as files" below).
+- [x] **Patterns as files**: `patterns/<name>.txt`, dots for blanks, `#` for comments.
+- [ ] **Patterns from an image**: `make image IMAGE=cat.png NAME=cat` shrinks a small picture
+      to 7 rows (keeping proportions, at most about 52 columns), maps darkness to shades 1–4,
+      prints it and saves `patterns/cat.txt`. Light or transparent pixels stay blank;
+      `INVERT=1` for light-on-dark pictures. Needs Pillow.
 
 ## Bugs in version 1
 
@@ -55,7 +57,6 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - **Place by column, not date**: pick a year and a week column (or "centre it"), and let the
   tool work out the start Sunday.
 - **Text**: render short text with a 5×7 pixel font.
-- **Patterns as files** (`patterns/*.txt`) instead of a Python dict, so adding one needs no code.
 - **Better "after" shades**: work out the cap (busiest day without outliers) from GitHub's
   real levels for the year, instead of assuming the busiest day. Measured 2026-10-28, cap
   that fits each year: 2018 → 2 (busiest 3), 2019 → 1 (busiest 4, one day), 2023 → 4,

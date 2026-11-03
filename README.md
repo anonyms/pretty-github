@@ -37,9 +37,21 @@ account.
 
 ### Adding patterns
 
-Patterns live in `patterns.py`: 7 strings, one per weekday from Sunday to Saturday, where a
-digit is the number of commits that day and a space is none. `make test` checks that every
-pattern has 7 rows of equal width, and `make preview` shows how it comes out.
+Each pattern is a text file in `patterns/`, named after the pattern (`patterns/heart.txt` is
+`PATTERN=heart`). It has 7 lines, one per weekday from Sunday to Saturday: a digit is the
+number of commits that day and a dot is none. Lines starting with `#` are comments.
+
+```text
+.1...1.
+111.111
+1111111
+.11111.
+..111..
+...1...
+.......
+```
+
+`make preview` shows how a new one comes out, and `make test` checks every file.
 
 ### Development
 

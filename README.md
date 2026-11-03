@@ -35,32 +35,18 @@ read your current graph.
 GitHub only counts the commits if your git email (`git config user.email`) is verified on your
 account.
 
-### Version 1, with Docker (to be removed)
+### Adding patterns
 
-1. Copy this repo
-2. Establish and copy the right GitHub token, prefrably with limited premissions, and only for the new repo. 
-(GitHub Settings -> Developer setting (bottom of the page) -> Personal access tokens -> Fine grained tokens (Not a 100% sure how to tune, I allowed for everything))
-3. Build and launch with docker (see below) - enter the necessary parameters during launch. 
-4. Add more patterns if you want - I recommend pasting the code into an AI chatbot, and asking it for more patterns
-
-
-Remember to docker build with arguments
-
-```console
-docker build --build-arg GIT_USER="username" --build-arg GIT_EMAIL="email" -t make-commits .  
-```
-```console
-docker run -it make-commits 
-```
+Patterns live in `patterns.py`: 7 strings, one per weekday from Sunday to Saturday, where a
+digit is the number of commits that day and a space is none. `make test` checks that every
+pattern has 7 rows of equal width, and `make preview` shows how it comes out.
 
 ### Development
 
 Run `make` to list the targets, e.g. `make test` and `make lint`.
 
-### Watch out
-I get it - the way the tokens are passed is not pretty. 
-
-But I did not want it saved anywhere, so passing like this seemed like the best option.
+Version 1 (early 2025) ran from a Dockerfile and asked for a GitHub token to push; it is in
+the git history if you want to look back.
 
 ### Honorable mentions
 

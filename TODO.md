@@ -30,8 +30,10 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
       user/email build args. Done as `commits.py`: y/N before committing and before pushing
       instead of a dry-run flag; empty commits at 12:00 UTC; one `git commit` per commit
       (24 commits in about 5 s, so no fast-import).
-- [ ] **Remove Docker and version 1**: `Dockerfile`, `make-commits.py`, `contributions.txt`,
+- [x] **Remove Docker and version 1**: `Dockerfile`, `make-commits.py`, `contributions.txt`,
       the Docker part of `README.md` and its "Watch out" about tokens.
+
+The queue is empty: the next PRs come from the ideas below.
 
 ## Bugs in version 1
 
@@ -40,7 +42,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
       `make commits` pushes with git's stored login.
 - [x] No check that the start date is a Sunday, so patterns come out shifted or cut.
 - [x] `GIT_USER` unset crashes later with a `TypeError` instead of a clear message.
-      `make commits` uses the local git config; the old script goes with Docker.
+      `make commits` uses the local git config; the old script is removed.
 - [x] One `git add` + `git commit` subprocess per commit: slow for large patterns. Empty
       commits halve the calls; fast enough (24 commits in about 5 s).
 

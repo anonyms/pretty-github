@@ -14,7 +14,7 @@ commits. The goal of the current iteration:
 ## Where things stand
 
 Version 1 (January–July 2025) was written by copy-pasting between Gemini, ChatGPT and Mistral,
-so it was never designed as a whole. Version 2 replaces it piece by piece:
+so it was never designed as a whole. Version 2 (October–November 2026) replaced it:
 
 - `commits.py` (`make commits`): checks main is clean and level with GitHub, shows the
   preview, asks before committing and before pushing. Empty commits at 12:00 UTC, pushed with
@@ -30,8 +30,8 @@ so it was never designed as a whole. Version 2 replaces it piece by piece:
   terminal, which is what the tests check.
 - `contributions.py`: reads the real graph through `gh api graphql` (read only). Falls back
   to the pattern alone if `gh` is missing or offline.
-- Version 1, until the next PR removes it: `make-commits.py` (asks for a token, appends to
-  `contributions.txt` per commit) and the `Dockerfile` that runs it.
+- Version 1 (`make-commits.py`, `Dockerfile`, `contributions.txt`) was removed on
+  2026-11-03; it is in the git history.
 
 The fake commits go into **this repo** on purpose: that is how they reach the graph. The 900+
 "Contribution" commits from 2018–2024 in `main` are earlier drawings, not clutter. They must
@@ -75,8 +75,6 @@ Everything runs locally via make and uv. Run `make` to list the targets.
 | `make lint` / `make format` | ruff check / format and auto-fix |
 | `make lock` / `make sync` | update `uv.lock` / create the local `.venv` |
 | `make clean` | remove tool caches |
-
-The old Docker way still works until the next PR removes it.
 
 - Dependencies: `uv add <pkg>` (or `uv add --group dev <pkg>`); commit `uv.lock` together with
   `pyproject.toml`, never edit it by hand.

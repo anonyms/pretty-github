@@ -14,6 +14,29 @@ I whish I had taken more notes building this, but overall
 
 ### Usage
 
+Needs [uv](https://docs.astral.sh/uv/), make (on Windows: `winget install ezwinports.make`)
+and the [GitHub CLI](https://cli.github.com/) logged in (`gh auth login`), which is used to
+read your current graph.
+
+1. Look at a pattern on your graph first; nothing is committed. The start date is the
+   top-left cell of the pattern and must be a Sunday.
+
+   ```console
+   make preview PATTERN=heart START=2024-03-03
+   ```
+
+2. Make the commits. This shows the same preview, then asks before committing to `main` and
+   again before pushing. It must be run on `main`, level with GitHub.
+
+   ```console
+   make commits PATTERN=heart START=2024-03-03
+   ```
+
+GitHub only counts the commits if your git email (`git config user.email`) is verified on your
+account.
+
+### Version 1, with Docker (to be removed)
+
 1. Copy this repo
 2. Establish and copy the right GitHub token, prefrably with limited premissions, and only for the new repo. 
 (GitHub Settings -> Developer setting (bottom of the page) -> Personal access tokens -> Fine grained tokens (Not a 100% sure how to tune, I allowed for everything))
@@ -32,14 +55,7 @@ docker run -it make-commits
 
 ### Development
 
-Needs [uv](https://docs.astral.sh/uv/) and make (on Windows: `winget install ezwinports.make`).
 Run `make` to list the targets, e.g. `make test` and `make lint`.
-
-To see a pattern on the graph before committing anything (the start date must be a Sunday):
-
-```console
-make preview PATTERN=heart START=2024-03-03
-```
 
 ### Watch out
 I get it - the way the tokens are passed is not pretty. 

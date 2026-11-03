@@ -100,9 +100,13 @@ def render(first_sunday: date, shades: Grid, colour: bool = True) -> str:
     return "\n".join(lines)
 
 
-def main(argv: list[str]) -> None:
+def read_args(argv: list[str], command: str) -> tuple[str, date, list[tuple[date, int]]]:
+    """Pattern name, start date and plan from PATTERN and START; exits with a message if wrong.
+
+    Shared with `make commits`, so both refuse the same input.
+    """
     if len(argv) != 2:
-        raise SystemExit("Usage: make preview PATTERN=heart START=2024-01-07")
+        raise SystemExit(f"Usage: make {command} PATTERN=heart START=2024-01-07")
     name, start_text = argv
     pattern = patterns.get_pattern(name)
     if pattern is None:
@@ -112,7 +116,11 @@ def main(argv: list[str]) -> None:
         plan = plan_commits(pattern, start)
     except ValueError as error:
         raise SystemExit(error) from None
+    return name, start, plan
 
+
+def show(name: str, start: date, plan: list[tuple[date, int]]) -> None:
+    """Print the graph now and after the plan, or the pattern alone if gh is not available."""
     last_day = max(date(start.year, 12, 31), plan[-1][0])
     try:
         real = fetch_calendar(range(start.year, last_day.year + 1))
@@ -145,6 +153,10 @@ def main(argv: list[str]) -> None:
             print("\nNo overlap with existing contributions")
     total = sum(count for _, count in plan)
     print(f"\n{name}: {total} commits on {len(plan)} days, {plan[0][0]} to {plan[-1][0]}")
+
+
+def main(argv: list[str]) -> None:
+    show(*read_args(argv, "preview"))
 
 
 if __name__ == "__main__":

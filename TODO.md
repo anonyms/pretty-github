@@ -23,20 +23,26 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
       by side, with colours bucketed over the combined data. Matters here because earlier
       drawings (2023, 2024) are already on the graph and a new one may overlap them.
       Done as two grids above each other (side by side is too wide), plus an overlap count.
-- [ ] **Rework the commit step** (`make commits`): reads the same plan as the preview, shows
+- [x] **Rework the commit step** (`make commits`): reads the same plan as the preview, shows
       it and asks for confirmation; dry run by default. Commit with
       `GIT_AUTHOR_DATE`/`GIT_COMMITTER_DATE` (maybe `git fast-import` for speed), push with
       `gh`/credential helper instead of a token in the URL. Uses the local git config, so no
-      user/email build args.
-- [ ] **Remove Docker** once the Makefile covers everything; update `README.md`.
+      user/email build args. Done as `commits.py`: y/N before committing and before pushing
+      instead of a dry-run flag; empty commits at 12:00 UTC; one `git commit` per commit
+      (24 commits in about 5 s, so no fast-import).
+- [ ] **Remove Docker and version 1**: `Dockerfile`, `make-commits.py`, `contributions.txt`,
+      the Docker part of `README.md` and its "Watch out" about tokens.
 
 ## Bugs in version 1
 
 - [x] Four patterns draw as one line (missing commas, see Next up).
-- [ ] The token is typed with `input()` (shown on screen) and put in the push URL.
+- [x] The token is typed with `input()` (shown on screen) and put in the push URL.
+      `make commits` pushes with git's stored login.
 - [x] No check that the start date is a Sunday, so patterns come out shifted or cut.
-- [ ] `GIT_USER` unset crashes later with a `TypeError` instead of a clear message.
-- [ ] One `git add` + `git commit` subprocess per commit: slow for large patterns.
+- [x] `GIT_USER` unset crashes later with a `TypeError` instead of a clear message.
+      `make commits` uses the local git config; the old script goes with Docker.
+- [x] One `git add` + `git commit` subprocess per commit: slow for large patterns. Empty
+      commits halve the calls; fast enough (24 commits in about 5 s).
 
 ## Ideas
 

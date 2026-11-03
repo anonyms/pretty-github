@@ -36,10 +36,19 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - [x] **More default patterns**: space-invader, pacman, christmas-tree, star, cat, house,
       skull, creeper (15 in all).
 - [x] **Patterns as files**: `patterns/<name>.txt`, dots for blanks, `#` for comments.
-- [ ] **Patterns from an image**: `make image IMAGE=cat.png NAME=cat` shrinks a small picture
+- [x] **Patterns from an image**: `make image IMAGE=cat.png NAME=cat` shrinks a small picture
       to 7 rows (keeping proportions, at most about 52 columns), maps darkness to shades 1–4,
       prints it and saves `patterns/cat.txt`. Light or transparent pixels stay blank;
-      `INVERT=1` for light-on-dark pictures. Needs Pillow.
+      `INVERT=1` for light-on-dark pictures. Needs Pillow. IMAGE can also be a URL (asked for
+      by the maintainer). Checked 2026-11-03 with Twemoji PNGs: heart, cat face and alien
+      monster are recognisable; a white ghost is not (too little contrast).
+
+## Ideas for image patterns
+
+- **Pick the threshold**: `BLANK_BELOW` (40) decides what counts as background. A setting
+  could help pictures on off-white or busy backgrounds.
+- **Colour instead of darkness**: the white ghost failed because it is light. Using
+  "different from the background colour" instead of "dark" would catch it.
 
 ## Bugs in version 1
 

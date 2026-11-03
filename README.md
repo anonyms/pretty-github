@@ -53,6 +53,19 @@ number of commits that day and a dot is none. Lines starting with `#` are commen
 
 `make preview` shows how a new one comes out, and `make test` checks every file.
 
+Or make one from a picture, pasted as a URL or given as a file. Quote the URL, since
+PowerShell does not accept `&` unquoted:
+
+```console
+make image IMAGE="https://example.com/cat.png" NAME=cat
+make preview PATTERN=cat START=2022-03-06
+```
+
+The picture is cropped, shrunk to 7 rows and its darkness turned into shades; light and
+transparent parts stay blank. Add `INVERT=1` for a light drawing on a dark background.
+Seven rows is tiny, so simple, high-contrast pictures (icons, emoji, pixel art) work best.
+PNG, JPEG, GIF and WebP work; SVG does not.
+
 ### Development
 
 Run `make` to list the targets, e.g. `make test` and `make lint`.

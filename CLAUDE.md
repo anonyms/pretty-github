@@ -19,8 +19,10 @@ so it was never designed as a whole. Version 2 (October–November 2026) replace
 - `commits.py` (`make commits`): checks main is clean and level with GitHub, shows the
   preview, asks before committing and before pushing. Empty commits at 12:00 UTC, pushed with
   git's stored login. Prints the undo (`git reset --keep <sha>`) before the first commit.
-- `patterns.py`: a dict of patterns, 7 strings (one per weekday row), a digit = commits that
-  day, space = none.
+- `patterns/*.txt`: one pattern per file, 7 lines (Sunday to Saturday), a digit = commits
+  that day, a dot = none (not spaces: editors strip trailing ones). `#` lines are comments.
+- `patterns.py`: loads the folder into a dict of 7 strings per pattern (dots become spaces)
+  and checks each file, naming the file and the problem.
 - `plan.py`: `plan_commits(pattern, start)` turns a pattern and a start Sunday into
   `(day, commits)` pairs. The one place that maps patterns onto the graph: the preview and
   the commit step must both use it.
@@ -39,8 +41,9 @@ stay on `main` (the default branch) to count, so never squash or rewrite them.
 
 Open work is in `TODO.md`.
 
-`tests/test_patterns.py` checks every pattern is 7 rows of equal width. `patterns.py` is
-wrapped in `# fmt: off` so ruff keeps each pattern one row per line. `tests/test_commits.py`
+`tests/test_patterns.py` checks every pattern is 7 rows of equal width. `import patterns`
+finds `patterns.py`, not the `patterns/` folder: Python prefers a module file over a folder
+without `__init__.py`, so keep it that way. `tests/test_commits.py`
 makes real commits, but only in throwaway repos under pytest's `tmp_path`.
 
 ## How the contribution graph works

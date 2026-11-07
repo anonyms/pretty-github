@@ -47,6 +47,24 @@ def check_ready(cwd: str | None = None) -> None:
         raise RuntimeError(f"main has {ahead} commits not on GitHub; push or drop them first")
 
 
+def check_identity(cwd: str | None = None) -> str:
+    """The email the commits will carry; RuntimeError if git has no name or email set.
+
+    A fresh git (in WSL, say) has neither, and GitHub only counts commits from a verified email.
+    """
+    for key in ("user.name", "user.email"):
+        try:
+            value = git("config", key, cwd=cwd)
+        except RuntimeError:  # git config exits with an error when the key is not set
+            value = ""
+        if not value:
+            raise RuntimeError(
+                f'No git {key} set. Run: git config --global {key} "..."'
+                " (for user.email, an email verified on your GitHub account)"
+            )
+    return git("config", "user.email", cwd=cwd)
+
+
 def make_commits(plan: list[tuple[date, int]], cwd: str | None = None) -> int:
     """Make the planned empty commits at noon UTC on each day; return how many were made."""
     total = sum(count for _, count in plan)
@@ -75,12 +93,12 @@ def ask(question: str) -> bool:
 def main(argv: list[str]) -> None:
     name, start, plan = preview.read_args(argv, "commits")
     try:
+        email = check_identity()
         check_ready()
     except RuntimeError as error:
         raise SystemExit(error) from None
 
     preview.show(name, start, plan)
-    email = git("config", "user.email")
     print(f"\nAuthor: {email}. GitHub only counts the commits if this email is verified")
     print("on your account (Settings > Emails).")
 
@@ -89,14 +107,21 @@ def main(argv: list[str]) -> None:
         raise SystemExit("Nothing changed.")
     before = git("rev-parse", "--short", "HEAD")
     # Printed first, so it is on screen even if the run stops halfway
-    print(f"To undo before pushing: git reset --keep {before}")
-    make_commits(plan)
+    undo = f"git reset --keep {before}"
+    print(f"To undo before pushing: {undo}")
+    try:
+        make_commits(plan)
+    except RuntimeError as error:
+        raise SystemExit(f"\nStopped: {error}\nUndo the commits made so far: {undo}") from None
 
     if not ask("Push to GitHub?"):
+        raise SystemExit(f"Not pushed. Push later with git push origin main, or undo: {undo}")
+    # Not through git(): the push shows its own progress and may ask for a login
+    if subprocess.run(["git", "push", "origin", "main"]).returncode != 0:
         raise SystemExit(
-            f"Not pushed. Push later with git push, or undo: git reset --keep {before}"
+            "Push failed (see above); the commits are still only local.\n"
+            f"Try again with git push origin main, or undo: {undo}"
         )
-    subprocess.run(["git", "push", "origin", "main"], check=True)
     print("Pushed. The graph on your profile can take a few minutes to update.")
 
 

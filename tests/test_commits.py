@@ -5,7 +5,7 @@ from datetime import date
 
 import pytest
 
-from commits import check_ready, git, make_commits
+from commits import check_identity, check_ready, git, make_commits
 
 
 def run(*args, cwd):
@@ -81,3 +81,17 @@ def test_not_ready_when_behind(repo, tmp_path):
     run("push", "-q", "origin", "main", cwd=other)
     with pytest.raises(RuntimeError, match="behind"):
         check_ready(cwd=repo)
+
+
+def test_identity_is_the_repos_email(repo):
+    assert check_identity(cwd=repo) == "test@example.com"
+
+
+def test_no_email_set_is_named(tmp_path, monkeypatch):
+    # Hide the machine's own git settings, as on a fresh WSL install
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(tmp_path / "no-global"))
+    monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
+    run("init", "-q", str(tmp_path / "fresh"), cwd=tmp_path)
+    run("config", "user.name", "Test", cwd=tmp_path / "fresh")
+    with pytest.raises(RuntimeError, match="No git user.email set"):
+        check_identity(cwd=str(tmp_path / "fresh"))

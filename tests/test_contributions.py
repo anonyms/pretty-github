@@ -1,5 +1,9 @@
+import subprocess
 from datetime import date
 
+import pytest
+
+import contributions
 from contributions import Day, parse_calendar
 
 
@@ -26,3 +30,14 @@ def test_parse_calendar_reads_counts_and_levels():
         date(2024, 1, 8): Day(1, 1),
         date(2024, 1, 9): Day(5, 4),
     }
+
+
+def test_gh_error_keeps_only_the_first_line(monkeypatch):
+    def crash(*args, **kwargs):
+        stderr = "fatal error: runtime: cannot allocate memory\n\nruntime stack:\n..."
+        raise subprocess.CalledProcessError(2, args[0], stderr=stderr)
+
+    monkeypatch.setattr(contributions.subprocess, "run", crash)
+    with pytest.raises(RuntimeError) as error:
+        contributions.gh("api", "user")
+    assert str(error.value) == "fatal error: runtime: cannot allocate memory"

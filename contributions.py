@@ -59,7 +59,9 @@ def gh(*args: str) -> str:
     except FileNotFoundError:
         raise RuntimeError("gh is not installed") from None
     except subprocess.CalledProcessError as error:
-        raise RuntimeError(error.stderr.strip() or f"gh {args[0]} failed") from None
+        # First line only: when gh itself crashes, the rest is a long Go stack trace
+        lines = error.stderr.strip().splitlines()
+        raise RuntimeError(lines[0] if lines else f"gh {args[0]} failed") from None
     return result.stdout
 
 

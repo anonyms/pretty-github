@@ -17,6 +17,8 @@ from plan import plan_commits
 # GitHub's dark-theme greens, from level 0 (no commits) to 4 (busiest)
 COLOURS = ["#2d333b", "#0e4429", "#006d32", "#26a641", "#39d353"]
 WEEKDAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""]
+# make preview without START: early March 2022, a year with nothing else on the graph
+DEFAULT_START = date(2022, 3, 6)
 
 # A grid is 7 rows (Sunday first) of weeks; None is a day outside the year shown
 Grid = list[list[int | None]]
@@ -100,18 +102,35 @@ def render(first_sunday: date, shades: Grid, colour: bool = True) -> str:
     return "\n".join(lines)
 
 
-def read_args(argv: list[str], command: str) -> tuple[str, date, list[tuple[date, int]]]:
+def read_args(
+    argv: list[str], command: str, default_start: date | None = None
+) -> tuple[str, date, list[tuple[date, int]]]:
     """Pattern name, start date and plan from PATTERN and START; exits with a message if wrong.
 
-    Shared with `make commits`, so both refuse the same input.
+    Shared with `make commits`, so both refuse the same input. The Makefile quotes both, so a
+    value left out arrives as "". Only the preview has a default start; commits must name one.
     """
+    usage = f"Usage: make {command} PATTERN=heart START=2022-03-06 (START is a Sunday)"
     if len(argv) != 2:
-        raise SystemExit(f"Usage: make {command} PATTERN=heart START=2024-01-07")
+        raise SystemExit(usage)
     name, start_text = argv
+    known = f"Patterns: {', '.join(patterns.patterns)}"
+    if not name:
+        raise SystemExit(f"Missing PATTERN.\n{usage}\n{known}")
     pattern = patterns.get_pattern(name)
     if pattern is None:
-        raise SystemExit(f"Pattern '{name}' not found. Known: {', '.join(patterns.patterns)}")
-    start = datetime.strptime(start_text, "%Y-%m-%d").date()
+        raise SystemExit(f"Pattern '{name}' not found.\n{known}")
+
+    if start_text:
+        try:
+            start = datetime.strptime(start_text, "%Y-%m-%d").date()
+        except ValueError:
+            raise SystemExit(f"START={start_text} is not a date; use YYYY-MM-DD") from None
+    elif default_start:
+        start = default_start
+        print(f"No START given, so using {start} (a quiet year).\n")
+    else:
+        raise SystemExit(f"Missing START.\n{usage}")
     try:
         plan = plan_commits(pattern, start)
     except ValueError as error:
@@ -156,7 +175,7 @@ def show(name: str, start: date, plan: list[tuple[date, int]]) -> None:
 
 
 def main(argv: list[str]) -> None:
-    show(*read_args(argv, "preview"))
+    show(*read_args(argv, "preview", default_start=DEFAULT_START))
 
 
 if __name__ == "__main__":

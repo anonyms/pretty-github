@@ -19,7 +19,8 @@ and the [GitHub CLI](https://cli.github.com/) logged in (`gh auth login`), which
 read your current graph.
 
 1. Look at a pattern on your graph first; nothing is committed. The start date is the
-   top-left cell of the pattern and must be a Sunday.
+   top-left cell of the pattern, written YYYY-MM-DD, and must be a Sunday. Without START,
+   the preview uses 2022-03-06.
 
    ```console
    make preview PATTERN=heart START=2024-03-03

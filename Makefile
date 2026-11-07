@@ -17,7 +17,7 @@ help:
 	$(info Drawing)
 	$(info $(I)preview   Show the graph now and with a pattern - nothing is committed)
 	$(info $(I)          reads your graph through gh - pattern alone without it)
-	$(info $(I)          e.g. make preview PATTERN=heart START=2024-03-03 - START is a Sunday)
+	$(info $(I)          e.g. make preview PATTERN=heart START=2024-03-03 - START is a Sunday, default 2022-03-06)
 	$(info $(I)commits   The same preview, then commit to main and push - asks before each)
 	$(info $(I)          e.g. make commits PATTERN=heart START=2024-03-03)
 	$(info $(I)image     Make a pattern from a picture, a URL or a file - saved in patterns/)
@@ -36,11 +36,12 @@ help:
 	$(info $(I)clean     Remove tool caches)
 	@cd .
 
+# Quoted, so a value left out reaches Python as "" and gets a clear message
 preview:
-	$(RUN) python preview.py $(PATTERN) $(START)
+	$(RUN) python preview.py "$(PATTERN)" "$(START)"
 
 commits:
-	$(RUN) python commits.py $(PATTERN) $(START)
+	$(RUN) python commits.py "$(PATTERN)" "$(START)"
 
 # Quoted, so a URL with & or ? survives cmd.exe
 image:

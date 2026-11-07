@@ -34,7 +34,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
       the Docker part of `README.md` and its "Watch out" about tokens.
 
 - [x] **More default patterns**: space-invader, pacman, christmas-tree, star, cat, house,
-      skull, creeper (15 in all).
+      skull, creeper (15 in all). Then alien, the first made with `make image` (16).
 - [x] **Patterns as files**: `patterns/<name>.txt`, dots for blanks, `#` for comments.
 - [x] **Patterns from an image**: `make image IMAGE=cat.png NAME=cat` shrinks a small picture
       to 7 rows (keeping proportions, at most about 52 columns), maps darkness to shades 1–4,

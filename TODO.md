@@ -63,6 +63,23 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 ## Ideas
 
+- **Clean old drawings** (parked 2026-11-07): the maintainer would like **2018 and 2019**
+  cleaned; 2015, 2023 and 2024 stay. GitHub has no way to subtract contributions, so cleaning
+  means removing the commits from `main` and force-pushing, which goes against "never rewrite
+  history" and would need that rule changed for a deliberate clean.
+  - Counted 2026-11-07: 2018 has 95 drawing commits, 2019 has 43, all "Contribution". They
+    were made on 2025-01-29/30, near the start of the repo, so removing them gives new IDs to
+    about 1,140 later commits (the kept drawings and all v2 work). Files end up unchanged;
+    old PR pages keep pointing at the old IDs. Only the maintainer's clone needs a reset.
+  - Shape: `make clean FROM=2018-01-01 TO=2019-12-31` (date range), later also
+    `make clean PATTERN=... START=...` (undo one pattern). Only commits with the message
+    "Contribution" and the maintainer's email; snapshot-based rewrite (no conflicts from the
+    old `contributions.txt` edits); now/after preview; ask before rewriting and before
+    pushing; local backup branch and the restore command; `--force-with-lease`; no open PRs.
+  - Check first that the 2018-2019 commits are all drawings, and measure how long GitHub
+    takes to drop contributions after a force-push.
+  - Alternative: future drawings in a separate canvas repo, so cleaning never touches the
+    code's history. Does not help with 2018-2019, which are already here.
 - **Place by column, not date**: pick a year and a week column (or "centre it"), and let the
   tool work out the start Sunday.
 - **Text**: render short text with a 5×7 pixel font.

@@ -17,7 +17,7 @@ from plan import plan_commits
 # GitHub's dark-theme greens, from level 0 (no commits) to 4 (busiest)
 COLOURS = ["#2d333b", "#0e4429", "#006d32", "#26a641", "#39d353"]
 WEEKDAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""]
-# make preview without START: early March 2022, a year with nothing else on the graph
+# make preview without START: an example Sunday, early March 2022
 DEFAULT_START = date(2022, 3, 6)
 
 # A grid is 7 rows (Sunday first) of weeks; None is a day outside the year shown

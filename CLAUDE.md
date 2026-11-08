@@ -38,8 +38,8 @@ so it was never designed as a whole. Version 2 (October–November 2026) replace
 - Version 1 (`make-commits.py`, `Dockerfile`, `contributions.txt`) was removed on
   2026-11-03; it is in the git history.
 
-The fake commits go into **this repo** on purpose: that is how they reach the graph. The 900+
-"Contribution" commits from 2018–2024 in `main` are earlier drawings, not clutter. They must
+The fake commits go into **this repo** on purpose: that is how they reach the graph. The many
+"Contribution" commits in `main` are earlier drawings, not clutter. They must
 stay on `main` (the default branch) to count, so never squash or rewrite them.
 
 Open work is in `TODO.md`.
@@ -62,9 +62,9 @@ What the preview and the commit generator need to get right:
 - The colours (5 levels) are **relative to the user's own activity**: the same number of
   commits can be a light or a dark square depending on their other contributions. So the
   preview must combine the pattern with the user's real contributions to be accurate.
-- GitHub does not document the shading. Measured 2026-10-28 on the maintainer's graph: shade =
+- GitHub does not document the shading. Measured 2026-10-28 on a real graph: shade =
   `ceil(4 × count / cap)`, where the cap is the busiest day except that some outlier days are
-  left out (2026: busiest 28, cap about 20). When outliers are dropped is not consistent, so
+  sometimes left out. When outliers are dropped is not consistent, so
   the preview's "after" shades are an estimate. The API returns GitHub's real shade per day
   (`contributionLevel`), so "now" is exact.
 - Reading the graph (`gh api graphql`, `gh api user`) is read only and fine for Claude to run.
@@ -106,8 +106,10 @@ Everything runs locally via make and uv. Run `make` to list the targets.
   preview rendering) in plain functions that can be tested without git or the network.
 - Comments are for the maintainer, who knows some Python: explain the why and non-obvious
   constructs briefly, don't repeat the code.
-- The maintainer is on **Windows** (PowerShell and Git Bash). Use LF line endings and UTF-8.
+- Must work on **Windows** (PowerShell and Git Bash) and in WSL. Use LF line endings and UTF-8.
 - Don't write the maintainer's name in files, commits or PRs; write "the maintainer" (they/them).
+- Keep the docs free of personal details (the maintainer's years, counts, other projects):
+  the repo is public.
 
 ## Workflow
 

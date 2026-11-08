@@ -35,6 +35,9 @@ so it was never designed as a whole. Version 2 (October–November 2026) replace
 - `image.py` (`make image`): picture from a URL or file → cropped, 7 rows, darkness as shades
   1–4 (stretched so the darkest cell is 4) → `patterns/<name>.txt`. Downloads stay in memory
   (10 MB cap); never overwrites a pattern.
+- `gallery.py` (`make gallery`): draws the README pictures, `docs/gallery.svg` (every
+  pattern) and `docs/example.svg` (a year with a few patterns), with the preview's functions.
+  A test fails when they are out of date, so rerun it after adding or changing a pattern.
 - Version 1 (`make-commits.py`, `Dockerfile`, `contributions.txt`) was removed on
   2026-11-03; it is in the git history.
 
@@ -78,6 +81,7 @@ Everything runs locally via make and uv. Run `make` to list the targets.
 | `make preview PATTERN=heart START=2024-03-03` | show a pattern on the graph; START is a Sunday, default 2022-03-06 |
 | `make commits PATTERN=heart START=2024-03-03` | the same preview, then commit and push (asks first) |
 | `make image IMAGE="https://..." NAME=cat` | make `patterns/cat.txt` from a picture; `INVERT=1` for light on dark |
+| `make gallery` | redraw the README pictures in `docs/` |
 | `make test` | pytest |
 | `make lint` / `make format` | ruff check / format and auto-fix |
 | `make lock` / `make sync` | update `uv.lock` / create the local `.venv` |

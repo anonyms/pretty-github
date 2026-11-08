@@ -1,46 +1,62 @@
 # pretty-github
-Making my GitHub contributions view pretty, ie adding icons and such.
 
+**Draw pixel art on your GitHub contribution graph, and preview it on your real graph before
+a single commit is made.**
 
-Pretty pointless stuff really, just wanted to try doing it through Genai Chat bots, all code written through them, with some very minor tweaks I just did without going through them.
+![A year of the contribution graph with a star, a space invader and Pac-Man drawn on it](docs/example.svg)
 
-### Learnings - coding with GenAi
-I whish I had taken more notes building this, but overall
-- Impressive interacting with the Gen AIs to beging with, but it definetly helped that I knew some coding, and could give some indications as to what I wanted.
-- I did ask it for alternatives, and it had good proposals. It did however later on mix solution alternatives, even though I stated I had picked on of the alternatives. Example: Docker file, or docker-compose. I chose going for one docker file, but later one it gave ideas around an .env file and docker-compose.
-- There were moments were it just was not able to quite adapt, and where I did a fix myself, seeing what direction the fix had to be inn, or did a quick internet search.
-- The true struggle was with patterns. There was a lot of back and forth, and heavily guided prompts, in order to create a good solution. I also had to manually go in and create most of the paterns. What impressed me was when I asked for the patterns to be transposed, this was resolved on the spot.
+Pick a pattern and a week, look at the preview, then let the tool make the backdated commits
+and push them. You can also turn any picture into a pattern by pasting its URL.
 
+## Why this one
 
-### Usage
+There are plenty of gitfiti tools (see [Honorable mentions](#honorable-mentions)). This one:
 
-Needs [uv](https://docs.astral.sh/uv/), make (on Windows: `winget install ezwinports.make`)
-and the [GitHub CLI](https://cli.github.com/) logged in (`gh auth login`), which is used to
-read your current graph.
+- **Previews on your real graph.** It reads your contributions through the GitHub CLI and
+  shows the graph now, with GitHub's own shades, and after the drawing. It also warns when the
+  drawing lands on days that already have contributions.
+- **Turns pictures into patterns.** Give it a PNG, JPEG, GIF or WebP, as a file or a URL, and
+  it saves a 7-row pattern you can preview straight away.
+- **Keeps patterns as plain text files.** Seven lines of digits and dots, easy to draw, edit
+  and share.
+- **Asks before it changes anything.** It asks before committing and again before pushing,
+  and prints the command that undoes the commits. It needs no token: it pushes with your
+  normal git login.
 
-1. Look at a pattern on your graph first; nothing is committed. The start date is the
-   top-left cell of the pattern, written YYYY-MM-DD, and must be a Sunday. Without START,
-   the preview uses 2022-03-06.
+## Quick start
+
+You need [uv](https://docs.astral.sh/uv/), make (on Windows: `winget install ezwinports.make`)
+and the [GitHub CLI](https://cli.github.com/), logged in with `gh auth login`.
+
+1. **Get your own copy.** Click **Use this template**, or clone this repo and push it to a new
+   repo of yours. It must not be a fork: GitHub does not count commits in forks.
+
+2. **Preview a pattern.** Nothing is committed. `START` is the top-left cell of the pattern:
+   a Sunday, written YYYY-MM-DD.
 
    ```console
-   make preview PATTERN=heart START=2024-03-03
+   make preview PATTERN=space-invader START=2022-03-06
    ```
 
-2. Make the commits. This shows the same preview, then asks before committing to `main` and
-   again before pushing. It must be run on `main`, level with GitHub.
+3. **Draw it.** This shows the same preview, then makes the commits on `main` and pushes them,
+   asking before each step.
 
    ```console
-   make commits PATTERN=heart START=2024-03-03
+   make commits PATTERN=space-invader START=2022-03-06
    ```
 
-GitHub only counts the commits if your git email (`git config user.email`) is verified on your
-account.
+   Your profile can take a few minutes to update.
 
-### Adding patterns
+Run `make` to list every command.
 
-Each pattern is a text file in `patterns/`, named after the pattern (`patterns/heart.txt` is
-`PATTERN=heart`). It has 7 lines, one per weekday from Sunday to Saturday: a digit is the
-number of commits that day and a dot is none. Lines starting with `#` are comments.
+## Patterns
+
+![All the patterns that come with the tool](docs/gallery.svg)
+
+Each pattern is a text file in [`patterns/`](patterns), named after the pattern:
+`patterns/heart.txt` is `PATTERN=heart`. It has 7 lines, one per weekday from Sunday to
+Saturday. A digit is the number of commits that day and a dot is none. Lines starting with
+`#` are comments.
 
 ```text
 .1...1.
@@ -52,29 +68,46 @@ number of commits that day and a dot is none. Lines starting with `#` are commen
 .......
 ```
 
-`make preview` shows how a new one comes out, and `make test` checks every file.
+Add a file, run `make preview` to see it, and `make test` to check it. `make gallery`
+redraws the pictures in this README.
 
-Or make one from a picture, pasted as a URL or given as a file. Quote the URL, since
-PowerShell does not accept `&` unquoted:
+### From a picture
+
+Paste a URL or give a file. Quote the URL, because PowerShell does not accept `&` unquoted.
 
 ```console
 make image IMAGE="https://example.com/cat.png" NAME=cat
 make preview PATTERN=cat START=2022-03-06
 ```
 
-The picture is cropped, shrunk to 7 rows and its darkness turned into shades; light and
-transparent parts stay blank. Add `INVERT=1` for a light drawing on a dark background.
-Seven rows is tiny, so simple, high-contrast pictures (icons, emoji, pixel art) work best.
-PNG, JPEG, GIF and WebP work; SVG does not.
+The picture is cropped and shrunk to 7 rows, and its darkness becomes the shades. Light and
+transparent parts stay blank. Add `INVERT=1` for a light drawing on a dark background. Seven
+rows is tiny, so simple, high-contrast pictures work best: icons, emoji and pixel art.
 
-### Development
+## How it works
 
-Run `make` to list the targets, e.g. `make test` and `make lint`.
+- The graph has one column per week and one row per weekday, Sunday at the top, so a
+  pattern has to start on a Sunday.
+- Each commit is empty and dated at noon UTC on its day, so it lands on the right day in
+  every timezone.
+- GitHub picks a square's shade relative to your own busiest days. The same pattern can
+  therefore come out lighter or darker on different graphs, which is why the preview reads
+  your real graph. GitHub does not document the exact rule, so the "after" shades are an
+  estimate. Quiet years give the most faithful drawings.
 
-Version 1 (early 2025) ran from a Dockerfile and asked for a GitHub token to push; it is in
-the git history if you want to look back.
+GitHub only counts the commits if:
 
-### Honorable mentions
+- they are on the repo's default branch;
+- your git email (`git config user.email`) is verified on your account;
+- the repo is not a fork;
+- for a private repo, "private contributions" is switched on in your profile.
+
+## Development
+
+Python 3.13 with uv, ruff and pytest. `make test`, `make lint` and `make format` cover the
+usual work. Run `make` for the full list.
+
+## Honorable mentions
 
 - [gitfiti](https://github.com/gelstudios/gitfiti) main source of inspiration - notably for this list :)
 - [PixelHub](https://github.com/behind24proxies/PixelHub), where you can draw what you want, download a file, and then reproduce it in commit
@@ -92,3 +125,7 @@ the git history if you want to look back.
 - [Paint GitHub](https://paintgithub.com/) is the most convenient way to paint your GitHub contribution graph!
 - [contribution-pixel-messages](https://github.com/abulvenz/contribution-pixel-messages) generates a date plan from an editable GUI
 - Seen something else? Submit a pull request or open an issue!
+
+## License
+
+[GPL-3.0](LICENSE)

@@ -8,7 +8,7 @@ EMPTY :=
 I := $(EMPTY)  $(EMPTY)
 
 .DEFAULT_GOAL := help
-.PHONY: help preview commits image test lint format lock sync clean
+.PHONY: help preview commits image gallery test lint format lock sync clean
 
 # $(info) prints from make itself, so help looks the same in every shell
 help:
@@ -22,6 +22,7 @@ help:
 	$(info $(I)          e.g. make commits PATTERN=heart START=2024-03-03)
 	$(info $(I)image     Make a pattern from a picture, a URL or a file - saved in patterns/)
 	$(info $(I)          e.g. make image IMAGE="https://...png" NAME=cat - add INVERT=1 for light on dark)
+	$(info $(I)gallery   Redraw the README pictures in docs/ - after adding or changing a pattern)
 	$(info )
 	$(info Quality)
 	$(info $(I)test      Run pytest)
@@ -46,6 +47,9 @@ commits:
 # Quoted, so a URL with & or ? survives cmd.exe
 image:
 	$(RUN) python image.py "$(IMAGE)" $(NAME) $(if $(INVERT),--invert)
+
+gallery:
+	$(RUN) python gallery.py
 
 test:
 	$(RUN) pytest

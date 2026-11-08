@@ -45,13 +45,14 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 - [x] **README for visitors**: what it is, a picture of the result, why this tool, a quick
       start, the pattern gallery, how it works. Pictures are SVGs drawn from the pattern files
       (`make gallery`), so no screenshots go stale. "Learnings" dropped.
-- [ ] **Repo settings for discoverability** (`gh repo edit`, public, so the maintainer OKs the
-      text first): description, topics, and "Template repository" switched on (the README's
-      quick start says "Use this template"). Social preview image: upload by hand under
-      Settings, the API cannot set it.
+- [x] **Repo settings for discoverability**: description, 10 topics (github-contributions,
+      contribution-graph, gitfiti, ...) and "Template repository" switched on, so the
+      README's "Use this template" works (2026-11-08).
 
 ## Ideas for getting noticed
 
+- Social preview image (Settings > General, by hand: the API cannot set it), e.g.
+  `docs/example.svg` exported as PNG.
 - Real screenshots in the README: the terminal preview, and a profile graph with a drawing.
 - Pin the repo on the profile; submit to awesome-lists; a "Show HN" or r/github post with
   the picture.

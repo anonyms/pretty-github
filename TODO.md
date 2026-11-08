@@ -20,8 +20,8 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
       the pattern placed on it, before asking anything else. Pattern alone, no real data yet.
 - [x] **Preview v2, with real contributions**: fetch the user's calendar for the year (GitHub
       GraphQL `contributionsCollection`, via `gh api graphql`) and show "now" and "after" side
-      by side, with colours bucketed over the combined data. Matters here because earlier
-      drawings (2023, 2024) are already on the graph and a new one may overlap them.
+      by side, with colours bucketed over the combined data. Matters because earlier
+      drawings may already be on the graph and a new one may overlap them.
       Done as two grids above each other (side by side is too wide), plus an overlap count.
 - [x] **Rework the commit step** (`make commits`): reads the same plan as the preview, shows
       it and asks for confirmation; dry run by default. Commit with
@@ -63,14 +63,29 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 ## Ideas
 
+- **Clean old drawings** (parked 2026-11-07): remove the drawings of chosen years. GitHub has
+  no way to subtract contributions, so cleaning means removing the commits from `main` and
+  force-pushing, which goes against "never rewrite history" and would need that rule changed
+  for a deliberate clean.
+  - Cost: every commit after the oldest one removed gets a new ID (kept drawings and code
+    alike). Files end up unchanged; old PR pages keep pointing at the old IDs. Every clone
+    needs a reset afterwards.
+  - Shape: `make clean FROM=... TO=...` (date range), later also `make clean PATTERN=...
+    START=...` (undo one pattern). Only commits with the message "Contribution" and the
+    user's email; snapshot-based rewrite (no conflicts from version 1's `contributions.txt`
+    edits); now/after preview; ask before rewriting and before pushing; a backup
+    (`git clone --mirror`) and the restore command; `--force-with-lease`; no open PRs.
+  - Check first that the commits in the range are all drawings, and measure how long GitHub
+    takes to drop contributions after a force-push.
+  - Alternative considered: one repo per drawing, deleted to undo it. Rejected: the drawings
+    belong in this repo.
 - **Place by column, not date**: pick a year and a week column (or "centre it"), and let the
   tool work out the start Sunday.
 - **Text**: render short text with a 5×7 pixel font.
 - **Better "after" shades**: work out the cap (busiest day without outliers) from GitHub's
-  real levels for the year, instead of assuming the busiest day. Measured 2026-10-28, cap
-  that fits each year: 2018 → 2 (busiest 3), 2019 → 1 (busiest 4, one day), 2023 → 4,
-  2024 → 5, 2025 → 14 (all equal to the busiest day), 2026 → about 20 (busiest 28, two
-  days). 2019 and 2025 both have one top day, but only 2019's is dropped.
+  real levels for the year, instead of assuming the busiest day. Measured 2026-10-28 over
+  several years: in most the cap is the busiest day, in some one or two top days are left
+  out, and two years with a single top day were treated differently.
 - **HTML/SVG preview** that looks like the real graph, after the terminal one.
 - **Editor**: a small web page or Streamlit app to draw a pattern on the grid with a live
   preview, then export it.
@@ -79,7 +94,7 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 - **The fake commits stay in this repo**, on `main`: that is the point of the project. Never
   rewrite or squash them (2026-10-26).
-- **uv + Makefile instead of Docker**, like the maintainer's other repos (2026-10-26).
+- **uv + Makefile instead of Docker**, like comparable projects (2026-10-26).
 - **Preview starts in the terminal**; HTML/SVG later (2026-10-26).
 - **No "intensity by level"** (patterns as shades, commit counts worked out from real data):
   drawings go into quiet years, where the digits already come out as drawn (2026-11-03).

@@ -1,4 +1,4 @@
-"""Reads the maintainer's real contribution graph from GitHub, for the preview.
+"""Reads the user's real contribution graph from GitHub, for the preview.
 
 Uses the gh CLI, so the login comes from `gh auth` and no token passes through this code.
 Read only. parse_calendar is separate from the gh call so the tests need no network.

@@ -47,12 +47,11 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
       (`make gallery`), so no screenshots go stale. "Learnings" dropped.
 - [x] **Repo settings for discoverability**: description, 10 topics (github-contributions,
       contribution-graph, gitfiti, ...) and "Template repository" switched on, so the
-      README's "Use this template" works (2026-11-08).
+      README's "Use this template" works. Social preview image (the example year with the
+      name, 1280×640 PNG) uploaded by hand: the API cannot set it. Repo pinned (2026-11-08).
 
 ## Ideas for getting noticed
 
-- Social preview image (Settings > General, by hand: the API cannot set it), e.g.
-  `docs/example.svg` exported as PNG.
 - Real screenshots in the README: the terminal preview, and a profile graph with a drawing.
 - Pin the repo on the profile; submit to awesome-lists; a "Show HN" or r/github post with
   the picture.

@@ -1,9 +1,11 @@
 from datetime import date
 
+import pytest
+
 import patterns
 from contributions import Day
 from plan import plan_commits
-from preview import combine, levels, month_header, render, year_grid
+from preview import combine, levels, month_header, read_args, render, year_grid
 
 
 def test_year_starts_on_the_sunday_before_new_year():
@@ -71,3 +73,20 @@ def test_last_day_fixes_the_end_of_the_grid():
     real = [(date(2025, 12, 31), 4)]
     _, grid = year_grid(real, 2024, last_day=date(2024, 12, 31))
     assert len(grid[0]) == 53
+
+
+def test_missing_pattern_lists_the_patterns():
+    with pytest.raises(SystemExit, match="(?s)Missing PATTERN.*heart"):
+        read_args(["", "2022-03-06"], "preview")
+
+
+def test_missing_start_uses_the_default_only_when_there_is_one():
+    name, start, _ = read_args(["heart", ""], "preview", default_start=date(2022, 3, 6))
+    assert (name, start) == ("heart", date(2022, 3, 6))
+    with pytest.raises(SystemExit, match="Missing START"):
+        read_args(["heart", ""], "commits")
+
+
+def test_start_that_is_not_a_date():
+    with pytest.raises(SystemExit, match="not a date; use YYYY-MM-DD"):
+        read_args(["heart", "06.03.2022"], "preview")

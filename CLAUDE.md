@@ -75,7 +75,7 @@ Everything runs locally via make and uv. Run `make` to list the targets.
 
 | Command | Purpose |
 |---|---|
-| `make preview PATTERN=heart START=2024-03-03` | show a pattern on the graph; START is a Sunday |
+| `make preview PATTERN=heart START=2024-03-03` | show a pattern on the graph; START is a Sunday, default 2022-03-06 |
 | `make commits PATTERN=heart START=2024-03-03` | the same preview, then commit and push (asks first) |
 | `make image IMAGE="https://..." NAME=cat` | make `patterns/cat.txt` from a picture; `INVERT=1` for light on dark |
 | `make test` | pytest |

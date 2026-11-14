@@ -35,6 +35,10 @@ The PR queue, in order. Each is a small PR the maintainer reviews and merges.
 
 - [x] **More default patterns**: space-invader, pacman, christmas-tree, star, cat, house,
       skull, creeper (15 in all). Then alien, the first made with `make image` (16).
+- [x] **Six more patterns**, drawn from scratch rather than copied from other tools (theirs
+      overlap ours or are trademarked characters): bug, ghost, pumpkin, crown, cactus, duck
+      (22 in all). Thin lines and sparse shapes look poor on the graph (heartbeat, wave,
+      glider and coffee were tried and dropped); solid silhouettes work.
 - [x] **Patterns as files**: `patterns/<name>.txt`, dots for blanks, `#` for comments.
 - [x] **Patterns from an image**: `make image IMAGE=cat.png NAME=cat` shrinks a small picture
       to 7 rows (keeping proportions, at most about 52 columns), maps darkness to shades 1–4,
